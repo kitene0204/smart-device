@@ -34,13 +34,8 @@ function doGet(e) {
 function doPost(e) {
   return jsonOut_(function () {
     var p = JSON.parse(e.postData.contents);
-    var lock = LockService.getScriptLock();
-    lock.waitLock(20000); // 두 사람이 동시에 눌러도 꼬이지 않게
-    try {
-      return processAction(p.id, p.name || '', p.action, p.type);
-    } finally {
-      lock.releaseLock();
-    }
+    // processAction 안에서 잠금(LockService)을 이미 처리함
+    return processAction(p.id, p.name || '', p.action, p.type);
   });
 }
 
